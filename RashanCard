@@ -1,0 +1,155 @@
+#app.components.ts
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+  
+  title = 'candidate';
+  sid:number=0;
+  s_name:string='';
+  selectedCandidate:any=null;
+  state_list:any=[
+    
+    {sid:1,s_name:'UP'},
+    {sid:2,s_name:'Bihar'},
+
+  ];
+  selected_district_list:any;
+  district_list:any=[
+    {did:1,sid:1,d_name:'Gorakhpur'},
+    {did:2,sid:1,d_name:'Deoria'},
+    {did:3,sid:2,d_name:'Samastipur'},
+    {did:4,sid:2,d_name:'patna'}
+
+  ];
+  selected_candidate_list:any;
+  candidate_list:any=[
+
+    {cid:1,did:1,c_name:'nihal',f_name:'something',dob:'2000-09-17',img:'assets/nihal.jpg'},
+    {cid:2,did:1,c_name:'himanshi',f_name:'something',dob:'2000-09-18',img:'assets/himanshi.png'},
+    {cid:3,did:2,c_name:'shivani',f_name:'something',dob:'2000-09-19',img:'assets/shivani.jpg'},
+    {cid:4,did:2,c_name:'priya',f_name:'something',dob:'2000-09-20',img:'assets/priya.png'},
+    {cid:5,did:3,c_name:'mahima',f_name:'something',dob:'2000-09-21',img:'assets/mahima.png'},
+    {cid:6,did:3,c_name:'rupa',f_name:'something',dob:'2000-09-22',img:'assets/rupa.png'},
+    {cid:7,did:4,c_name:'neha',f_name:'something',dob:'2000-09-23',img:'assets/neha.jpg'},
+    {cid:8,did:4,c_name:'abhinav',f_name:'something',dob:'2000-09-24',img:'assets/nihal.jpg'},
+  ];
+
+  ngOnInit(): void {
+   
+  }
+  getSname(item:any){
+    console.log("Selected District:",item.target.value);
+  this.selected_district_list = this.district_list.filter((x:any)=> {
+    
+    
+    if(x.sid==item.target.value)
+    return x;
+  });
+  
+
+}
+getCname(item:any){
+  console.log("Selected Candidate:",item.target.value);
+  this.selected_candidate_list=this.candidate_list.filter((x:any)=>{
+    if(x.did==item.target.value)
+    return x;
+  });
+
+}
+getCandidate(e:any){
+  let clist=this.candidate_list.filter((item:any)=>
+  {
+  if(item.cid==e.target.value)
+  return item;
+  });
+ this.selectedCandidate=clist[0];
+}
+}
+ 
+#app.component.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/li0bs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body style="background:url('assets/images/bk2.jpg');height:850px;">
+  <div class="row">
+  <h1 style="text-align: center;color: teal;"><u>Candidate Details</u></h1>
+  <div class="row"><br>
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+       <select (change)="getSname($event)">
+       <option>Select</option>
+       <option *ngFor="let item of state_list" [value]="item.sid">{{item.s_name}}</option>
+    </select><br><br>
+    </div>
+    <div class="col-sm-4"></div>
+  </div>
+
+
+ <div class="row"><br>
+    <div class="col-sm-4"></div>
+    <div class="col=sm-4">&nbsp;&nbsp;&nbsp;
+       <select (change)="getCname($event)">
+       <option>Select</option>
+       <option *ngFor="let item of selected_district_list" [value]="item.did">{{item.d_name}}</option>
+       </select><br><br>
+    </div>
+    <div class="col-sm-4"></div>
+  </div>
+
+
+  <div class="row"><br>
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4">
+        <select (change)="getCandidate($event)">
+        <option>Select</option>
+        <option *ngFor="let item of selected_candidate_list" [value]="item.cid">{{item.c_name}}</option>
+        </select><br><br>
+      </div>
+      <div class="col-sm-4"></div>
+  </div>
+
+  <div class="row">
+     <div class="col-sm-4"></div>
+     <div class="col-sm-4">
+        <ng-container *ngIf="selectedCandidate!=null">
+   Profile Photo:<img [src]="selectedCandidate?.img" style="height:100px;width:100px"><br><br>
+   Name:{{selectedCandidate?.c_name}}<br>
+   Father's Name:{{selectedCandidate?.f_name}}<br>
+   DOB:{{selectedCandidate?.dob}}
+        </ng-container>
+     </div>
+  </div>
+  </div>
+</body>
+</html>
+#app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
